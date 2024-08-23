@@ -1,5 +1,5 @@
 import dbConnect from "@/backend/config/dbConnect";
-import { allRooms, getSingleRoom } from "@/backend/controllers/roomControllers";
+import { getSingleRoom } from "@/backend/controllers/roomControllers";
 import { createEdgeRouter } from "next-connect";
 import { NextRequest } from "next/server";
 
@@ -13,7 +13,6 @@ const router = createEdgeRouter<NextRequest, RequestContext>();
 
 dbConnect();
 
-router.get(allRooms);
 router.get(getSingleRoom);
 
 export async function GET(request: NextRequest, ctx: RequestContext) {
