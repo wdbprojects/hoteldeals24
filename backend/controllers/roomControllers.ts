@@ -6,9 +6,12 @@ import APIFilters from "@/backend/utils/apiFilters";
 
 /* GET ALL ROOMS */
 export const allRooms = catchAsyncErrors(async (req: NextRequest) => {
-  const resPerPage: number = 4;
+  const resPerPage: number = 16;
   //const rooms = await Room.find();
   const { searchParams } = new URL(req.url);
+
+  // throw new ErrorHandler("Hello, this is a custom error!!!", 401);
+
   const queryStr: any = {};
 
   searchParams.forEach((value, key) => {

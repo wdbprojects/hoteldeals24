@@ -21,6 +21,7 @@ export interface IReview extends Document {
 }
 
 export interface IRoom extends Document {
+  _id: string;
   name: string;
   description: string;
   pricePerNight: number;
@@ -35,7 +36,7 @@ export interface IRoom extends Document {
   roomCleaning: boolean;
   ratings: number;
   numOfReviews: number;
-  images: IImage;
+  images: IImage[];
   category: string;
   reviews: IReview[];
   user: mongoose.Schema.Types.ObjectId;

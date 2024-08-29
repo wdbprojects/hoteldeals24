@@ -12,8 +12,15 @@ const SearchField = () => {
   return (
     <form onSubmit={handleSubmit} method="GET" action="/search">
       <div className="relative">
-        <Input name="query" placeholder="Search..." className="pl-8" />
-        <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
+        <Input
+          name="query"
+          placeholder="Search..."
+          className="pl-8 bg-muted-foreground/10"
+        />
+        <Search
+          size={16}
+          className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground"
+        />
       </div>
     </form>
   );

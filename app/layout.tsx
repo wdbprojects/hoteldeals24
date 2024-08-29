@@ -3,6 +3,7 @@ import "./globals.css";
 import { montserrat } from "@/components/shared/fonts";
 import { cn } from "@/lib/utils";
 import { GlobalProvider } from "./GlobalProvider";
+import Navbar from "@/components/layout/navbar";
 
 export const metadata: Metadata = {
   title: { template: "%s | Hotel Deals", default: "Hotel Deals" },
@@ -22,7 +23,12 @@ export default function RootLayout({
           montserrat.variable,
         )}
       >
-        <GlobalProvider>{children}</GlobalProvider>
+        <GlobalProvider>
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
+            {children}
+          </div>
+        </GlobalProvider>
       </body>
     </html>
   );
