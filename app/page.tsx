@@ -5,15 +5,20 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Home - Hotel Deals",
 };
-const getRooms = async () => {
-  const response = await fetch(`${process.env.API_URL}/api/rooms`, {
-    cache: "no-cache",
-  });
+const getRooms = async (searchParams: string) => {
+  const urlParams = new URLSearchParams(searchParams);
+  const queryString = urlParams.toString();
+  const response = await fetch(
+    `${process.env.API_URL}/api/rooms?${queryString}`,
+    {
+      cache: "no-cache",
+    },
+  );
   return response.json();
 };
 
-export default async function Page() {
-  const data = await getRooms();
+export default async function Page({ searchParams }: { searchParams: string }) {
+  const data = await getRooms(searchParams);
 
   if (data?.message) {
     return <Error error={data} />;

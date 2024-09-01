@@ -11,8 +11,7 @@ interface IDataProps {
   };
 }
 
-const HomePage = ({ data }: { data: IDataProps }) => {
-  const { rooms, resPerPage, filteredRoomsCount, roomsCount } = data;
+const HomePage = ({ data }: IDataProps) => {
   return (
     <main className="block mx-auto min-h-screen p-8 max-w-[1460px] w-full">
       <div>
@@ -20,7 +19,7 @@ const HomePage = ({ data }: { data: IDataProps }) => {
           All Rooms
         </h2>
       </div>
-      <div className="w-full mx-auto">{<HotelsGrid rooms={rooms} />}</div>
+      <div className="w-full mx-auto">{<HotelsGrid data={data} />}</div>
     </main>
   );
 };

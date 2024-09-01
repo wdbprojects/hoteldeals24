@@ -11,7 +11,7 @@ const RatingStars = ({ ratings, size }: { ratings: number; size: string }) => {
       starRatedColor="#f43f5e"
       numberOfStars={5}
       name="rating"
-      starDimension={Number(size)}
+      starDimension={size}
       starSpacing="5px"
     />
   );
