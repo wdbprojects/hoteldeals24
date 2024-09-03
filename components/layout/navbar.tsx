@@ -2,6 +2,7 @@ import Link from "next/link";
 import SearchField from "@/components/forms/search-field";
 import DarkMode from "@/components/shared/dark-mode";
 import UserMenu from "@/components/shared/user-menu";
+import PopoverSearchForm from "../forms/popover-search-form";
 
 const Navbar = () => {
   return (
@@ -10,7 +11,8 @@ const Navbar = () => {
         <Link href="/" className="text-2xl font-bold text-primary">
           Hotel Deals
         </Link>
-        <SearchField />
+        {/* <SearchField /> */}
+        <PopoverSearchForm />
         <div className="flex items-center gap-4">
           <DarkMode />
           <UserMenu />

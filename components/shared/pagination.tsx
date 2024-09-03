@@ -10,6 +10,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useRouter, useSearchParams } from "next/navigation";
+import Loading from "@/app/loading";
 
 interface PaginationProps {
   resPerPage: number;
@@ -26,12 +27,17 @@ const PaginationComp = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   const searchParams = useSearchParams();
+  let queryParams: URLSearchParams;
+  const router = useRouter();
+  useEffect(() => {
+    setTotalPages(Math.ceil(roomsCount / resPerPage));
+  }, [resPerPage, roomsCount]);
+  if (!searchParams) {
+    return <Loading />;
+  }
+
   let page = searchParams.get("page") || 1;
   page = Number(page);
-
-  let queryParams: URLSearchParams;
-
-  const router = useRouter();
 
   const handlePageChange = (currentPage: string) => {
     if (typeof window !== "undefined") {
@@ -45,10 +51,6 @@ const PaginationComp = ({
     const path = `${window.location.pathname}?${queryParams.toString()}`;
     router.push(path);
   };
-
-  useEffect(() => {
-    setTotalPages(Math.ceil(roomsCount / resPerPage));
-  }, [resPerPage, roomsCount]);
 
   const length = 5;
 

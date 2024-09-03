@@ -26,6 +26,7 @@ export interface IRoom extends Document {
   description: string;
   pricePerNight: number;
   address: string;
+  city: string;
   location: ILocation;
   guestCapacity: number;
   numOfBeds: number;
@@ -64,6 +65,10 @@ const roomSchema: Schema = new Schema({
   address: {
     type: String,
     required: [true, "Please enter the room address"],
+  },
+  city: {
+    type: String,
+    required: [true, "Please enter the room city"],
   },
   location: {
     type: {

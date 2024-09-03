@@ -16,7 +16,7 @@ interface IRoomProps {
 
 const RoomItem = ({ room }: IRoomProps) => {
   return (
-    <article className="group relative">
+    <article className="group relative h-full">
       <Card className="transform group-hover:shadow-xl transition-shadow duration-500 h-full">
         <CardContent className="p-4 h-full flex flex-col justify-between">
           <div>
@@ -38,6 +38,10 @@ const RoomItem = ({ room }: IRoomProps) => {
           </div>
 
           <div>
+            <h3 className="mt-2 text-center text-muted-foreground text-base ">
+              Location city:{" "}
+              <span className="capitalize font-semibold">{room?.city}</span>
+            </h3>
             <div className="mt-2 text-center">
               <p className="text-foreground text-sm">
                 <span className="font-bold text-lg">${room.pricePerNight}</span>{" "}
