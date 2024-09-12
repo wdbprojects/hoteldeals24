@@ -26,7 +26,7 @@ const HomePage = ({ data }: IDataProps) => {
       <div>
         <h2 className="text-2xl text-center font-medium">
           {location
-            ? `Rooms found with location ${location.toUpperCase()}: ${
+            ? `Rooms found with location ${location?.toUpperCase()}: ${
                 data.filteredRoomsCount
               }`
             : "All Rooms"}

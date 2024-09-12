@@ -7,6 +7,8 @@ const nextConfig = {
       "mongodb+srv://wdbmain:vFQiG9Do24BCRBFk@cluster0.2idxc.mongodb.net/hoteldeals?retryWrites=true&w=majority",
     DB_URI:
       "mongodb+srv://wdbmain:vFQiG9Do24BCRBFk@cluster0.2idxc.mongodb.net/hoteldeals?retryWrites=true&w=majority",
+    NEXTAUTH_URL: "http://localhost:3000",
+    NEXTAUTH_SECRET: "FSGSDYERTHDFHGRTYHFDGHFGHJRJ",
   },
   images: {
     remotePatterns: [

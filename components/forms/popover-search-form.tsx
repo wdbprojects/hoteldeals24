@@ -76,18 +76,18 @@ const PopoverSearchForm = () => {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-80 text-left relative text-muted-foreground cursor-text hover:bg-background"
+          className="w-full text-left relative text-muted-foreground cursor-text hover:bg-background"
         >
           <Search
             size={16}
             className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground font-extralight"
           />
-          <span className="absolute left-8 top-1/2 -translate-y-1/2 transform font-normal text-muted-foreground">
+          <span className="absolute left-8 top-1/2 -translate-y-1/2 transform font-normal text-muted-foreground hidden sm:block">
             Search options...
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="lg:w-96 md:w-6xl w-7xl">
         <div className="grid gap-2">
           <div className="space-y-2">
             <h4 className="font-medium leading-none text-lg">Search options</h4>

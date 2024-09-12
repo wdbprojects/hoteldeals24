@@ -11,9 +11,22 @@ import {
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/shared/user-avatar";
 import Link from "next/link";
-import { LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, NotebookPen } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-const UserMenu = () => {
+interface UserDataProps {
+  userData: any;
+}
+
+const UserMenu = ({ userData }: UserDataProps) => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    signOut();
+    router.replace("/");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,9 +42,9 @@ const UserMenu = () => {
       <DropdownMenuContent className="w-56 space-y-1" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p>Logged in as nataslut</p>
+            <p>Logged in as {userData?.name}</p>
             <div className="text-xs leading-none text-muted-foreground">
-              nata@slutty.com
+              {userData?.email}
             </div>
           </div>
         </DropdownMenuLabel>
@@ -40,20 +53,35 @@ const UserMenu = () => {
         <DropdownMenuGroup className="">
           <DropdownMenuItem className="cursor-pointer">
             <Link href={`/users/nataslut`} className="flex items-center gap-2">
-              <UserAvatar className="h-5 w-5" />
+              <UserAvatar
+                className="h-5 w-5"
+                avatarUrl={userData.avatar ? userData.avatar.url : null}
+              />
               <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Link href={`#`} className="flex items-center gap-2">
+              <LayoutDashboard className="h-4 w-4" />
+              <span>Dashboard</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Link href={`#`} className="flex items-center gap-2">
+              <NotebookPen className="h-4 w-4" />
+              <span>My Bookings</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
+        <DropdownMenuSeparator />
+
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="flex cursor-pointer items-center gap-2"
-            onClick={() => {
-              console.log("Log out");
-            }}
+            onClick={handleLogout}
           >
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-4 w-4" />
             <span>Logout</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
