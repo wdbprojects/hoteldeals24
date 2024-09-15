@@ -5,9 +5,10 @@ import User from "@/backend/models/user";
 // REGISTER USER => /api/auth/register
 export const registerUser = catchAsyncErrors(async (req: NextRequest) => {
   const body = await req.json();
-  const { name, email, password } = body;
+  const { firstName, lastName, email, password } = body;
   const user = await User.create({
-    name: name,
+    firstName: firstName,
+    lastName: lastName,
     email: email,
     password: password,
   });

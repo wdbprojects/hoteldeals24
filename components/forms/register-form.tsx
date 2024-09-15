@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRegisterMutation } from "@/redux/api/auth-api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const registerSchema = z.object({
   firstName: z
@@ -59,11 +63,31 @@ const RegisterForm = () => {
     formState: { errors },
   } = form;
 
+  const router = useRouter();
+
+  const [register, { isLoading, error, isSuccess }] = useRegisterMutation();
+
+  useEffect(() => {
+    if (error && "data" in error) {
+      console.log(error?.data);
+      toast.error("An error has occurred");
+    }
+    if (isSuccess) {
+      router.push("/login");
+      toast.success("Account created successfully, please Log In now");
+      reset();
+    }
+  }, [error, isSuccess]);
+
   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
     const { firstName, lastName, email, password } = values;
-    const data = { firstName, lastName, email, password };
-    reset();
-    console.log(data);
+    const userData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    };
+    await register(userData);
   };
 
   return (
@@ -167,8 +191,12 @@ const RegisterForm = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <span className="font-medium">Register</span>
+                  )}
                 </Button>
                 <Button
                   type="reset"

@@ -42,7 +42,9 @@ const UserMenu = ({ userData }: UserDataProps) => {
       <DropdownMenuContent className="w-56 space-y-1" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p>Logged in as {userData?.name}</p>
+            <p>
+              Logged in as {userData?.firstName} {userData?.lastName}
+            </p>
             <div className="text-xs leading-none text-muted-foreground">
               {userData?.email}
             </div>
