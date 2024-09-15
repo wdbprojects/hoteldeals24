@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useRegisterMutation } from "@/redux/api/auth-api";
+import { isApiError } from "@/redux/api/auth-api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -69,8 +70,11 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (error && "data" in error) {
-      console.log(error?.data);
-      toast.error("An error has occurred");
+      if (isApiError(error)) {
+        toast.error(error?.data?.message);
+      } else {
+        toast.error("Something went wrong, please try again later.");
+      }
     }
     if (isSuccess) {
       router.push("/login");
