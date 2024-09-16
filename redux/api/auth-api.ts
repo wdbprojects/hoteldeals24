@@ -29,6 +29,7 @@ export type CreateApi = {
   };
 };
 
+/* CLAUDE AI SOLUTION TO CHECK FOR API ERRORS TYPE */
 export function isFetchBaseQueryError(
   error: unknown,
 ): error is FetchBaseQueryError {

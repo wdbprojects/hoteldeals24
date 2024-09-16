@@ -54,12 +54,12 @@ const UserMenu = ({ userData }: UserDataProps) => {
 
         <DropdownMenuGroup className="">
           <DropdownMenuItem className="cursor-pointer">
-            <Link href={`/users/nataslut`} className="flex items-center gap-2">
+            <Link href={`/me/update`} className="flex items-center gap-2">
               <UserAvatar
                 className="h-5 w-5"
                 avatarUrl={userData.avatar ? userData.avatar.url : null}
               />
-              <span>Profile</span>
+              <span>Update Profile</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">

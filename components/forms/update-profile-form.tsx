@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import DarkMode from "@/components/shared/dark-mode";
 import {
   Card,
   CardContent,
@@ -13,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,13 +21,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useRegisterMutation } from "@/redux/api/auth-api";
+import {
+  useLazyUpdateSessionQuery,
+  useUpdateProfileMutation,
+} from "@/redux/api/user-api";
 import { isApiError } from "@/redux/api/auth-api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setUser } from "@/redux/features/userSlice";
 
-const registerSchema = z.object({
+const updateUserSchema = z.object({
   firstName: z
     .string()
     .min(1, { message: "Required field" })
@@ -41,70 +44,79 @@ const registerSchema = z.object({
     .min(2, { message: "Last name should be at least 2 characters" })
     .max(32, { message: "Last name should be at most 32 characters" }),
   email: z.string().email({ message: "Enter a valid email" }).trim(),
-  password: z
-    .string()
-    .min(8, { message: "Password should be at least 8 characters" }),
 });
 
-const RegisterForm = () => {
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+const UpdateProfileForm = () => {
+  const form = useForm<z.infer<typeof updateUserSchema>>({
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
-      password: "",
     },
   });
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = form;
+  const { handleSubmit, control, reset, setValue } = form;
 
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  const [register, { isLoading, error, isSuccess }] = useRegisterMutation();
+  const { user: currentUser } = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const [updateProfile, { isLoading, error, isSuccess }] =
+    useUpdateProfileMutation();
+
+  const [updateSession, { data }] = useLazyUpdateSessionQuery();
+
+  console.log(data);
+
+  if (data) {
+    dispatch(setUser(data?.user));
+  }
 
   useEffect(() => {
-    if (error && "data" in error) {
-      if (isApiError(error)) {
-        // CLAUDE AI solution to type error
-        toast.error(error?.data?.message);
-      } else {
-        toast.error("Something went wrong, please try again later.");
-      }
-    }
     if (isSuccess) {
-      router.push("/login");
-      toast.success("Account created successfully, please Log In now");
+      //@ts-ignore
+      updateSession();
+      router.refresh();
+      toast.success("Profile updated successfully.");
       reset();
     }
-  }, [error, isSuccess]);
+  }, [isSuccess, currentUser, error]);
 
-  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
-    const { firstName, lastName, email, password } = values;
+  const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
+    const { firstName, lastName, email } = values;
     const userData = {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: password,
     };
-    await register(userData);
+    await updateProfile(userData);
   };
+
+  const handleSetValue = () => {
+    for (const key in currentUser) {
+      if (Object.hasOwnProperty.call(currentUser, key)) {
+        setValue(key as "firstName" | "lastName" | "email", currentUser[key]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      handleSetValue();
+    }
+  }, [currentUser]);
 
   return (
     <Card className="mx-auto max-w-sm sm:w-sm">
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
-          <DarkMode />
+        <div className="">
+          <CardTitle className="text-2xl">Update Profile</CardTitle>
         </div>
-        <CardDescription>
-          Enter your information to create an account
-        </CardDescription>
+        <CardDescription>Update your profile information</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -174,33 +186,13 @@ const RegisterForm = () => {
                   }}
                 />
               </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={control}
-                  name="password"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            autoComplete="off"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
-              <div className="space-y-2">
+
+              <div className="space-y-2 !mt-6">
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
-                    <span className="font-medium">Register</span>
+                    <span className="font-medium">Update Profile</span>
                   )}
                 </Button>
                 <Button
@@ -217,15 +209,9 @@ const RegisterForm = () => {
             </div>
           </form>
         </Form>
-        <div className="mt-4 text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline">
-            Log in
-          </Link>
-        </div>
       </CardContent>
     </Card>
   );
 };
 
-export default RegisterForm;
+export default UpdateProfileForm;

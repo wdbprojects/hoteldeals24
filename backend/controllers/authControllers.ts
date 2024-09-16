@@ -14,3 +14,15 @@ export const registerUser = catchAsyncErrors(async (req: NextRequest) => {
   });
   return NextResponse.json({ success: true, user: user });
 });
+
+// UPDATE PROFILE => /api/me/update
+export const updateProfile = catchAsyncErrors(async (req: NextRequest) => {
+  const body = await req.json();
+  const userData = {
+    firstName: body.firstName,
+    lastName: body.lastName,
+    email: body.email,
+  };
+  const updatedUser = await User.findByIdAndUpdate(req.user._id, userData);
+  return NextResponse.json({ success: true, user: updatedUser });
+});
